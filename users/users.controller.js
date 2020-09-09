@@ -20,30 +20,25 @@ router.put('/:id', authorize(), userUpdate);
 module.exports = router;
 
 function authenticateSchema(req, res, next) {
-    // console.log('authenticate schema, userscontroller', req.body);
     const schema = Joi.object({
         username: Joi.string().required(),
         password: Joi.string().required()
     });
-    // console.log('shema of authenticatoin', schema)
     validateRequest(req, next, schema);
 }
 
 function authenticate(req, res, next) {
-    // console.log('authenticate, userscontroller');
     const { username, password } = req.body;
     const ipAddress = req.ip;
     userService.authenticate({ username, password, ipAddress })
         .then(({ refreshToken, ...user }) => {
             setTokenCookie(res, refreshToken);
-            // console.log('response inside authenticate', res);
             res.json(user);
         })
         .catch(next);
 }
 
 function refreshToken(req, res, next) {
-    // console.log('refresh toekn, userscontroller');
     const token = req.cookies.refreshToken;
     const ipAddress = req.ip;
     userService.refreshToken({ token, ipAddress })
@@ -55,7 +50,6 @@ function refreshToken(req, res, next) {
 }
 
 function revokeTokenSchema(req, res, next) {
-    // console.log('removek tekn schema, userscontroller');
     const schema = Joi.object({
         token: Joi.string().empty('')
     });
@@ -64,7 +58,6 @@ function revokeTokenSchema(req, res, next) {
 
 function revokeToken(req, res, next) {
     // accept token from request body or cookie
-    // console.log('remove token', req.body.token, '', req.cookies.refreshToken);
     const token = req.body.token || req.cookies.refreshToken;
     const ipAddress = req.ip;
 
@@ -126,7 +119,6 @@ function setTokenCookie(res, token)
 function addUser(req, res, next) {
     userService.createUser(req.body)
     .then((user) => res.json(user), (error) => {
-        // console.log('error in creating', error);
         res.status(400).json({
             message: 'error in validation',
         });

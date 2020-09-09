@@ -92,7 +92,6 @@ async function updateUser(user) {
 
 async function getById(id) {
     const user = await getUser(id);
-    // console.log('user ', user);  
 
     return user;
 }

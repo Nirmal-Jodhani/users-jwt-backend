@@ -1,0 +1,4 @@
+{
+    "connectionString": "mongodb://localhost:27017/users-jws",
+    "secret": "THIS IS USED TO SIGN AND VERIFY JWT TOKENS"
+}
